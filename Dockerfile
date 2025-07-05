@@ -1,16 +1,20 @@
-# ./Dockerfile
 FROM python:3.12-slim
 WORKDIR /app
 
-# Install Poetry
-RUN pip install poetry && \
+# Install system deps + Poetry
+RUN apt-get update && apt-get install -y \
+    libpq-dev && \
+    rm -rf /var/lib/apt/lists/* && \
+    pip install poetry && \
     poetry config virtualenvs.create false
 
-# Copy dependencies
-COPY pyproject.toml poetry.lock ./
-RUN poetry install --only main
+# Copy ONLY required files for dependency installation
+COPY README.md pyproject.toml poetry.lock ./
 
-# Copy app
+# Install dependencies (skip project installation)
+RUN poetry install --only main --no-root
+
+# Copy everything else
 COPY . .
 
-CMD ["uvicorn", "italianme.main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "80"]

@@ -1,6 +1,9 @@
 [project]
 name = "italian-me"
 version = "0.1.0"
+packages = [
+    { include = "src", from = "." }  # Explicitly declare src/ as package
+]
 description = ""
 authors = [
     {name = "dipper",email = "mahdikafashkohan@gmail.com"}

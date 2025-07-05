@@ -1,24 +1,27 @@
-version: '3.8'
 services:
   app:
     build: .
     env_file: .env.prod
     ports:
-      - "80:80"
+      - "8000:80"
     depends_on:
       db:
         condition: service_healthy
+    volumes:
+      - ./src:/app/src
 
   db:
     image: postgres:16-alpine
     env_file: .env.prod
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 5
     volumes:
       - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"  # Expose locally for inspection
 
 volumes:
   pg_data:
