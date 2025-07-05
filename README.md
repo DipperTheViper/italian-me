@@ -1,4 +1,4 @@
-This project is for learning purposes only.
+##This project is for learning purposes only.
 
 # ItalianMe
 Backend for Italian verb conjugation app.
